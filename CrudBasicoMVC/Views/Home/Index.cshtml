@@ -1,1 +1,39 @@
-﻿<p>Este es el index</p>
+﻿@*Defino el modelo que estamos usando, asi como se lo pasamos desde el controlador en este caso se lo pasamos como 
+    return View(alumno.Listar()); que nos devuelve un List<Alumno>*@
+
+@model List<Model.Alumno>
+
+
+@{
+    ViewBag.title = "Inicio";
+}
+
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nombre Completo</th>
+            <th>Sexo</th>
+            <th>Fecha de Nacimiento</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@(item.Nombre+ " " + item.Apellido)</td>
+                <td>@(item.Sexo == 1 ? "Hombre": "Mujer")</td>
+                <td>@item.FechaNacimiento</td>
+                <td>
+                    <a href="" style="color: #00FF00;">Ver</a>
+                    <a>/</a>
+                    <a href="">Editar</a>
+                    <a>/</a>
+                    <a href="" style="color: #FF0000;">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
