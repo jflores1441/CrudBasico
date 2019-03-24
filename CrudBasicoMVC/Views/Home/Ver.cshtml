@@ -1,0 +1,61 @@
+﻿@model Model.Alumno
+
+@{
+    //Title- Titulo de la pestaña en el Navegador
+    ViewBag.Title = Model.Nombre + " " + Model.Apellido;
+}
+
+@*breadcrumb- Indica la ubicación de la página actual dentro de una jerarquía de navegación.
+    Los separadores se agregan automáticamente en CSS*@
+
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="~/">Home</a></li>
+    <li class="breadcrumb-item active">@(Model.Nombre + " " + Model.Apellido)</li>
+</ol>
+
+<div class="panel panel-success">
+    <div class="panel-heading">Información Personal</div>
+    <div class="panel-body">
+        <dl class="dl-horizontal">
+            <dt>Nombre: </dt>
+            <dd>@(Model.Nombre + " " + Model.Apellido)</dd>
+            <dt>Fecha de Nacimiento: </dt>
+            <dd>@Model.FechaNacimiento</dd>
+            <dt>Sexo</dt>
+            <dd>@(Model.Sexo == 1 ? "Hombre" : "Mujer")</dd>
+        </dl>
+    </div>
+</div>
+
+<div class="panel panel-success">
+    <div class="panel-heading">Bitácora de Calificaciones</div>
+    <div class="panel-body">
+        <table class="table table-striped">
+            @*Tag <thead> se usa para indicar los encabezados*@
+           <thead>
+               @*Tag <tr> se usa para indicar una Fila*@
+               <tr>
+                   @*Tag <th></th> se usa para indicar una columna*@
+                   <th>Curso</th>
+                   <th class="text-right">Promedio</th>
+               </tr>
+            </thead>
+            @*Tag <tbody> se usa indicar el contenido de la tabla*@
+           <tbody>
+               @foreach (var item in Model.AlumnoCurso)
+               {
+                   @*Tag <tr> se usa para indicar una Fila*@
+                   <tr>
+                       @*Tag <th></th> se usa para indicar una columna*@
+                       <td>@item.Curso.Nombre</td>
+                       <td class="text-right">@string.Format(new System.Globalization.CultureInfo("en-US"),"{0:0.00}", item.Nota)</td>
+                   </tr>
+               }
+           </tbody>       
+        </table>
+    </div>
+</div>
+
+
+
+

@@ -1,0 +1,22 @@
+﻿@model Model.Alumno
+
+@{
+    //Title -  Nombre que tendra la pestaña del navegador
+    ViewBag.Title = (Model.id > 0 ? Model.Nombre + " " + Model.Apellido : "Nuevo Registro");
+}
+
+@*breadcrumb- Indica la ubicación de la página actual dentro de una jerarquía de navegación.
+    Los separadores se agregan automáticamente en CSS*@
+
+<ol class="breadcrumb">
+    <li><a href="~/">Home</a></li>
+    <li class="active">@(Model.id > 0 ? Model.Nombre + " " + Model.Apellido : "Nuevo Registro")</li>
+</ol>
+
+
+@*Se usa para los formularios y el formulario usa el método POST, y el método de accion procesa la solicitud para la vista*@
+
+@using (Html.BeginForm("Guardar", "Home", FormMethod.Post, new { id = " frm-alumno"}))
+{
+
+}

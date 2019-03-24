@@ -64,7 +64,9 @@ namespace Model
             {
                 using (var ctx = new TestContext())
                 {
-                    alumno = ctx.Alumno.Where(x => x.id == id)
+                    alumno = ctx.Alumno.Include("AlumnoCurso")
+                                        .Include("AlumnoCurso.Curso")
+                                        .Where(x => x.id == id)
                                         .SingleOrDefault();
                 }
             }
