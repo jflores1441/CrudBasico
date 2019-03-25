@@ -25,19 +25,47 @@ namespace CrudBasicoMVC.Controllers
         }
 
         //Método que insetará o actualizará un registro
-        public ActionResult Crud(int id=0)
+        public ActionResult Crud(int id = 0)
         {
             return View(
                 //Cuando el valor de id=0 generará un nuevo registro, de lo contrario lo actualizará dependiendo del id que reciba
-                id == 0 ? new Alumno() : alumno.Obtener(id) 
+                id == 0 ? new Alumno() : alumno.Obtener(id)
                 );
         }
 
-        public ActionResult Guardar (Alumno model)
+        //public ActionResult Guardar(Alumno model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        model.Guardar();
+        //        return Redirect("~/home");
+        //    }
+        //    else
+        //    {
+        //        return View("~/views/home/crud.cshtml", model);
+        //    }
+
+        //}
+
+        //Método que usaremos a partir de que queremos introducir un script de AJAX y usar JSON
+        //Ref vease el Model llamado ResponseModel
+        public JsonResult Guardar(Alumno model)
         {
-           model.Guardar();
-           return Redirect("~/home");
+            var rm = new ResponseModel();
+
+            if (ModelState.IsValid)
+            {
+                rm= model.Guardar();
+
+                if (rm.response)
+                {
+                    rm.href = Url.Content("~/home");
+                }
+            }
+
+            return Json(rm); //Usando la clase JSON , serializa lo que le pasemos en automatico
         }
+
 
         public ActionResult Eliminar(int id)
         {
@@ -45,6 +73,6 @@ namespace CrudBasicoMVC.Controllers
             alumno.Eliminar();
             return Redirect("~/home");
         }
-     
+
     }
 }

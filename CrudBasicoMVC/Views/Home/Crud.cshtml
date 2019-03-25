@@ -16,7 +16,7 @@
 
 @*Se usa para los formularios y el formulario usa el método POST, y el método de accion procesa la solicitud para la vista*@
 
-@using (Html.BeginForm("Guardar", "Home", FormMethod.Post, new { id = " frm-alumno"}))
+@using (Html.BeginForm("Guardar", "Home", FormMethod.Post, new { id = "frm-alumno" }))
 {
     @Html.HiddenFor(x => x.id)
     <div class="panel panel-default">
@@ -26,31 +26,62 @@
         <div class="panel-body">
             <div class="form-group">
                 @Html.LabelFor(x => x.Nombre)
-                @Html.TextBoxFor(x => x.Nombre, new { @class= "form-control"})
+                @Html.TextBoxFor(x => x.Nombre, new { @class = "form-control", placeholder = "Ingresa el Nombre" })
+                @Html.ValidationMessageFor(x => x.Nombre, null, new { @class = "text-danger" })
             </div>
 
             <div class="form-group">
                 @Html.LabelFor(x => x.Apellido)
-                @Html.TextBoxFor(x => x.Apellido, new { @class= "form-control"})
+                @Html.TextBoxFor(x => x.Apellido, new { @class = "form-control", placeholder = "Ingresa el Apellido" })
+                @Html.ValidationMessageFor(x => x.Apellido, null, new { @class = "text-danger" })
             </div>
 
             <div class="form-group">
                 @Html.LabelFor(x => x.Sexo)
                 <select class="form-control" name="Sexo">
+                    <option disabled selected>Selecciona una opción</option>
                     <option @(Model.Sexo == 1 ? "selected" : "") value="1">Hombre</option>
                     <option @(Model.Sexo == 2 ? "selected" : "") value="2">Mujer</option>
                 </select>
+                @Html.ValidationMessageFor(x => x.Sexo, null, new { @class = "text-danger" })
             </div>
             <div class="form-group">
                 @Html.LabelFor(x => x.FechaNacimiento)
                 @Html.TextBoxFor(x => x.FechaNacimiento, new { @type = "date", @class = "form-control datepicker" })
+                @Html.ValidationMessageFor(x => x.FechaNacimiento, null, new { @class = "text-danger" })
             </div>
         </div>
     </div>
 
     <div class="text-right">
-        <button type="submit" class="btn btn-primary">Guardar</button>
-        <button class="btn btn-danger">Cancelar</button>
-        @*<a class="btn btn-danger" href="~/Home/Cancelar">Cancelar</a>*@
+        <button data-ajax="true" type="submit" class="btn btn-primary">Guardar</button>
+        @*<button class="btn btn-danger">Cancelar</button>*@
+        <a class="btn btn-danger" href="~/Home">Cancelar</a>
     </div>
 }
+
+@*<script>   
+    $(document).ready(function () {//La funcion se ejecuta en cuanto el servidor está listo...
+        $("#frm-alumno").submit(function (){ //Cuando el evento submit se ejecute en el formulario frm-alumno
+            var form = $(this); //Guardamos en una variable, para obtener mas adelante la url
+            $ajax({//Ejecuta una petición AJAX
+                dataType: 'JSON',//Esperamos nos retorne un JSON
+                type: 'POST',//Pasamos información por el método POST
+                url: form.attr('action'),//Obtiene la URL del formulario
+                data: form.serialize(),//Va a serializar todo el formulario
+                success: function (r) {
+                    if (r.response) {
+                        window.location.href = r.href;
+                    }
+                    else {
+                        alert(r.message);
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {//
+                    console.log(textStatus + ' ' + errorThrown);
+                }
+            });
+            return false; //Para anular el postback del script
+        }
+    })
+</script>*@

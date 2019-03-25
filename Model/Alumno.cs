@@ -80,13 +80,42 @@ namespace Model
             return alumno;
         }
 
-        public void Guardar()
+        //public void Guardar()
+        //{
+        //    try
+        //    {
+        //        using (var ctx = new TestContext())
+        //        {
+        //           if(this.id > 0)
+        //            {
+        //                ctx.Entry(this).State = EntityState.Modified;
+        //            }
+        //            else
+        //            {
+        //                ctx.Entry(this).State = EntityState.Added;
+        //            }
+
+        //            ctx.SaveChanges();
+        //        }
+        //    }
+
+        //    catch (Exception e)
+        //    {
+        //        throw;
+        //    }          
+        //}
+
+
+        //Método que usamos despues de incluir script , ajax y ResponseModel
+        public ResponseModel Guardar()
         {
+            var rm = new ResponseModel();
+
             try
             {
                 using (var ctx = new TestContext())
                 {
-                   if(this.id > 0)
+                    if (this.id > 0)
                     {
                         ctx.Entry(this).State = EntityState.Modified;
                     }
@@ -94,7 +123,7 @@ namespace Model
                     {
                         ctx.Entry(this).State = EntityState.Added;
                     }
-
+                    rm.SetResponse(true);
                     ctx.SaveChanges();
                 }
             }
@@ -102,7 +131,9 @@ namespace Model
             catch (Exception e)
             {
                 throw;
-            }          
+            }
+
+            return rm;
         }
 
         public void Eliminar()
