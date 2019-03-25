@@ -27,34 +27,43 @@
     </div>
 </div>
 
-<div class="panel panel-success">
-    <div class="panel-heading">Bitácora de Calificaciones</div>
-    <div class="panel-body">
-        <table class="table table-striped">
-            @*Tag <thead> se usa para indicar los encabezados*@
-           <thead>
-               @*Tag <tr> se usa para indicar una Fila*@
-               <tr>
-                   @*Tag <th></th> se usa para indicar una columna*@
-                   <th>Curso</th>
-                   <th class="text-right">Promedio</th>
-               </tr>
-            </thead>
-            @*Tag <tbody> se usa indicar el contenido de la tabla*@
-           <tbody>
-               @foreach (var item in Model.AlumnoCurso)
-               {
-                   @*Tag <tr> se usa para indicar una Fila*@
-                   <tr>
-                       @*Tag <th></th> se usa para indicar una columna*@
-                       <td>@item.Curso.Nombre</td>
-                       <td class="text-right">@string.Format(new System.Globalization.CultureInfo("en-US"),"{0:0.00}", item.Nota)</td>
-                   </tr>
-               }
-           </tbody>       
-        </table>
+@if (Model.AlumnoCurso.Count > 0)
+{
+    <div class="panel panel-success">
+        <div class="panel-heading">Bitácora de Calificaciones</div>
+        <div class="panel-body">
+            <table class="table table-striped">
+                @*Tag <thead> se usa para indicar los encabezados*@
+                <thead>
+                    @*Tag <tr> se usa para indicar una Fila*@
+                    <tr>
+                        @*Tag <th></th> se usa para indicar una columna*@
+                        <th>Curso</th>
+                        <th class="text-right">Promedio</th>
+                    </tr>
+                </thead>
+                @*Tag <tbody> se usa indicar el contenido de la tabla*@
+                <tbody>
+                    @foreach (var item in Model.AlumnoCurso)
+                    {
+                        @*Tag <tr> se usa para indicar una Fila*@
+                        <tr>
+                            @*Tag <th></th> se usa para indicar una columna*@
+                            <td>@item.Curso.Nombre</td>
+                            <td class="text-right">@string.Format(new System.Globalization.CultureInfo("en-US"), "{0:0.00}", item.Nota)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
+}
+
+else
+{
+   <p style="color: #FF0000;">No hay cursos asignados a este alumno</p>
+}
+
 
 
 

@@ -4,6 +4,7 @@ namespace Model
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
+    using System.Data.Entity;
     using System.Data.Entity.Spatial;
     using System.Linq;
 
@@ -79,6 +80,46 @@ namespace Model
             return alumno;
         }
 
+        public void Guardar()
+        {
+            try
+            {
+                using (var ctx = new TestContext())
+                {
+                   if(this.id > 0)
+                    {
+                        ctx.Entry(this).State = EntityState.Modified;
+                    }
+                    else
+                    {
+                        ctx.Entry(this).State = EntityState.Added;
+                    }
 
+                    ctx.SaveChanges();
+                }
+            }
+
+            catch (Exception e)
+            {
+                throw;
+            }          
+        }
+
+        public void Eliminar()
+        {
+            try
+            {
+                using (var ctx = new TestContext())
+                {
+                    ctx.Entry(this).State = EntityState.Deleted;
+                    ctx.SaveChanges();
+                }
+            }
+
+            catch (Exception e)
+            {
+                throw;
+            }
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿@*Defino el modelo que estamos usando, asi como se lo pasamos desde el controlador en este caso se lo pasamos como 
+﻿@*Defino el modelo que estamos usando, asi como se lo pasamos desde el controlador en este caso se lo pasamos como
     return View(alumno.Listar()); que nos devuelve un List<Alumno>*@
 
 @model List<Model.Alumno>
@@ -8,6 +8,11 @@
     ViewBag.title = "Inicio";
 }
 
+
+<div class="text-right">
+    <a href="~/home/crud/?id" class="btn btn-info btn-lg">Nuevo</a>
+</div>
+<br />
 
 <table class="table table-striped">
     <thead>
@@ -23,15 +28,15 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td>@(item.Nombre+ " " + item.Apellido)</td>
-                <td>@(item.Sexo == 1 ? "Hombre": "Mujer")</td>
+                <td>@(item.Nombre + " " + item.Apellido)</td>
+                <td>@(item.Sexo == 1 ? "Hombre" : "Mujer")</td>
                 <td>@item.FechaNacimiento</td>
                 <td>
                     <a href="~/Home/Ver/@item.id" style="color: #00FF00;">Ver</a>
                     <a>/</a>
-                    <a href="">Editar</a>
+                    <a href="~/Home/Crud/@item.id">Editar</a>
                     <a>/</a>
-                    <a href="" style="color: #FF0000;">Eliminar</a>
+                    <a href="~/Home/Eliminar/@item.id" style="color: #FF0000;" onclick="return confirm ('¿Desea eliminar este registro?')">Eliminar</a>
                 </td>
             </tr>
         }

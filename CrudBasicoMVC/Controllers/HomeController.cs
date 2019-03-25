@@ -32,5 +32,19 @@ namespace CrudBasicoMVC.Controllers
                 id == 0 ? new Alumno() : alumno.Obtener(id) 
                 );
         }
+
+        public ActionResult Guardar (Alumno model)
+        {
+           model.Guardar();
+           return Redirect("~/home");
+        }
+
+        public ActionResult Eliminar(int id)
+        {
+            alumno.id = id;
+            alumno.Eliminar();
+            return Redirect("~/home");
+        }
+     
     }
 }
