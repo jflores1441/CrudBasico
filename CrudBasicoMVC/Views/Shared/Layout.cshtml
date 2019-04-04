@@ -10,9 +10,11 @@
     <meta name="viewport" content="width=device-width" />
     <title>CRUD Básico en MVC-@ViewBag.Title</title>
 
+    @*<link href="~/assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/assets/css/bootstrap-theme.min.css" rel="stylesheet" />*@
     <link href="~/assets/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="~/assets/css/bootstrap-theme.min.css" rel="stylesheet" />
-    <link href="~/assets/css/style.css" rel="stylesheet" /> @*Hoja de estilos propia del curso*@
+
+    <link href="~/assets/css/style.css" rel="stylesheet" /> @*Hoja de estilos propia del curso, para usar ini.js*@
     <script src="~/assets/js/jquery.min.js"></script>
  
 </head>
@@ -26,11 +28,16 @@
         @RenderBody()      @* El RenderBody es el encargado de ejecutar las vistas dependiendo de la Accion en la que estemos*@
 
     </div>
+    @*<script src="~/assets/js/bootstrap.min.js"></script>*@
     <script src="~/assets/js/bootstrap.min.js"></script>
+
+    @* pluggins (scripts) descargados desde NuGet para poder validar nuestros formularios con Javascript del lado del cliente
+        se agregan en automatico tambien al webconfig y estó detiene el postback y muestra en automatico los
+        mensajes de alerta de nuestro formulario en cuando detecta el evento submit del formulario*@
     <script src="~/assets/js/jquery.validate.min.js"></script>
     <script src="~/assets/js/jquery.validate.unobtrusive.min.js"></script>
 
     <script src="~/assets/js/ini.js"></script> @*scripts propios del curso*@
-    <script src="~/assets/js/jquery.form.js"></script>
+    <script src="~/assets/js/jquery.form.js"></script> @*para usar el script ini.js*@
 </body>
 </html>

@@ -1,0 +1,31 @@
+﻿@model Model.Adjunto
+
+@{
+    List<Model.Adjunto> adjuntos = ViewBag.Adjuntos;
+}
+
+
+@*HTMLHELPER BeginForm(string actionName, string controllerName, FormMethod Method, object htmlAttributes)*@
+@using (Html.BeginForm("GuardarAdjunto", "Home", FormMethod.Post, new { id = "frm-adjuntos" }))
+{
+    @Html.HiddenFor(x => x.Alumno_id)
+    <div class="form-group">
+        <label>Seleccione un documento a subir:</label>
+        <input type="file" name="Archivo" />
+    </div>
+    <div class="text-right">
+        <button data-ajax="true" data-confirm="¿Esta seguro de adjuntar este archivo al alumno?" type="submit" class="btn btn-primary">Guardar</button>
+    </div>
+}
+<hr />
+
+<ul class="list-group">
+    @foreach (var item in adjuntos)
+    {    //En la base se datos solo se guardará el nombre del Archivo+ Extension e indicamos en una etiqueta donde se estaran guardando
+        //target blank es para que lo abra en una nueva pagina
+        <li class="list-group-item">
+            <a href="~/Uploads/@item.Archivo" target="_blank">@item.Archivo</a>
+        </li>     
+    }
+</ul>
+

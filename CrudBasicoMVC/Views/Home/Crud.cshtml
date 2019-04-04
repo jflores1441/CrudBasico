@@ -1,44 +1,49 @@
 ﻿@model Model.Alumno
-
 @{
     //Title -  Nombre que tendra la pestaña del navegador
-    ViewBag.Title = (Model.id > 0 ? Model.Nombre + " " + Model.Apellido : "Nuevo Registro");
+    ViewBag.Title = (Model.id > 0 ? Model.Nombre + " " + Model.Apellido : "Nuevo registro");
 }
 
 @*breadcrumb- Indica la ubicación de la página actual dentro de una jerarquía de navegación.
     Los separadores se agregan automáticamente en CSS*@
 
 <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="~/">Home</a></li>
-    <li class="breadcrumb-item active">@(Model.id > 0 ? Model.Nombre + " " + Model.Apellido : "Nuevo Registro")</li>
+    <li class="breadcrumb-item"><a href="~/">Alumnos</a></li>
+    <li class="breadcrumb-item active">@(Model.id > 0 ? Model.Nombre + " " + Model.Apellido : "Nuevo registro")</li>
 </ol>
 
+<!-- Nav tabs -->
+<ul class="nav nav-tabs" role="tablist">
+    <li class="nav-item" role="presentation"><a class="nav-link active" href="#informacion" aria-controls="informacion" role="tab" data-toggle="tab">Información</a></li>
 
-@*Se usa para los formularios y el formulario usa el método POST, y el método de accion procesa la solicitud para la vista*@
+    @if (Model.id > 0)
+    {
+        <li class="nav-item" role="presentation"><a class="nav-link" href="#cursos" aria-controls="cursos" role="tab" data-toggle="tab">Cursos</a></li>
+        <li class="nav-item" role="presentation"><a class="nav-link" href="#adjuntos" aria-controls="adjuntos" role="tab" data-toggle="tab">Adjuntos</a></li>
+    }
+</ul>
 
-@using (Html.BeginForm("Guardar", "Home", FormMethod.Post, new { id = "frm-alumno" }))
-{
-    @Html.HiddenFor(x => x.id)
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            Información Personal
-        </div>
-        <div class="panel-body">
+<!-- Tab panels -->
+<div class="tab-content">
+    <div role="tabpanel" class="tab-pane fade show active" id="informacion">
+        @*Se usa para los formularios y el formulario usa el método POST, y el método de accion procesa la solicitud para la vista*@
+        @using (Html.BeginForm("Guardar", "Home", FormMethod.Post, new { id = "frm-alumno" }))
+        {
+            @Html.HiddenFor(x => x.id)
+
             <div class="form-group">
                 @Html.LabelFor(x => x.Nombre)
                 @Html.TextBoxFor(x => x.Nombre, new { @class = "form-control", placeholder = "Ingresa el Nombre" })
                 @Html.ValidationMessageFor(x => x.Nombre, null, new { @class = "text-danger" })
             </div>
-
             <div class="form-group">
                 @Html.LabelFor(x => x.Apellido)
                 @Html.TextBoxFor(x => x.Apellido, new { @class = "form-control", placeholder = "Ingresa el Apellido" })
                 @Html.ValidationMessageFor(x => x.Apellido, null, new { @class = "text-danger" })
             </div>
-
             <div class="form-group">
                 @Html.LabelFor(x => x.Sexo)
-                <select class="form-control" name="Sexo">
+                <select name="Sexo" class="form-control">
                     <option disabled selected>Selecciona una opción</option>
                     <option @(Model.Sexo == 1 ? "selected" : "") value="1">Hombre</option>
                     <option @(Model.Sexo == 2 ? "selected" : "") value="2">Mujer</option>
@@ -50,38 +55,92 @@
                 @Html.TextBoxFor(x => x.FechaNacimiento, new { @type = "date", @class = "form-control datepicker" })
                 @Html.ValidationMessageFor(x => x.FechaNacimiento, null, new { @class = "text-danger" })
             </div>
-        </div>
-    </div>
 
-    <div class="text-right">
-        <button data-ajax="true" type="submit" class="btn btn-primary">Guardar</button>
-        @*<button class="btn btn-danger">Cancelar</button>*@
-        <a class="btn btn-danger" href="~/Home">Cancelar</a>
+            <div class="text-right">
+                @* En lugar de usar el script de abajo , usamos un script ini.js sumado al atributo
+                    data-ajax= "true" , para que le formulario sepa que se va a trabajar por AJAX
+                    data-confirm, para que muestre una ventana de confirmacion antes de procesar el formulario
+                *@
+                <button data-ajax="true" data-confirm="¿Esta seguro de guardar este registro?" type="submit" class="btn btn-primary">Guardar</button>
+                <a class="btn btn-danger" href="~/Home">Cancelar</a>
+            </div>
+        }
     </div>
-}
+    @if (Model.id > 0)
+    {
+        <div role="tabpanel" class="tab-pane" id="cursos"></div>
+        <div role="tabpanel" class="tab-pane" id="adjuntos"></div>
+    }
+</div>
 
-@*<script>   
-    $(document).ready(function () {//La funcion se ejecuta en cuanto el servidor está listo...
-        $("#frm-alumno").submit(function (){ //Cuando el evento submit se ejecute en el formulario frm-alumno
-            var form = $(this); //Guardamos en una variable, para obtener mas adelante la url
-            $ajax({//Ejecuta una petición AJAX
-                dataType: 'JSON',//Esperamos nos retorne un JSON
-                type: 'POST',//Pasamos información por el método POST
-                url: form.attr('action'),//Obtiene la URL del formulario
-                data: form.serialize(),//Va a serializar todo el formulario
-                success: function (r) {
-                    if (r.response) {
-                        window.location.href = r.href;
-                    }
-                    else {
-                        alert(r.message);
-                    }
-                },
-                error: function (jqXHR, textStatus, errorThrown) {//
-                    console.log(textStatus + ' ' + errorThrown);
-                }
-            });
-            return false; //Para anular el postback del script
+@*Cargando los cursos con AJAX*@
+<script>
+    $(document).ready(function () {
+        @if (Model.id > 0) //Para que los cursos se vean solo cuando estamos actualizando los datos del alumno
+        {
+            //Las etiquetas de <text> son para que lo que encierre no lo tome como c#, sino como funcion de JS
+            <text>
+            CargarCursos();
+            CargarAdjuntos();
+            </text>
         }
     })
-</script>*@
+    function CargarCursos()
+    {
+        //Estamos mandando por la URL la variable que queremos mandarle al servidor ?Alumno_id=
+        $("#cursos").load('@Url.Content("~/home/cursos/?Alumno_id=" + Model.id)');
+    }
+
+    function CargarAdjuntos()
+    {
+        //Estamos mandando por la URL la variable que queremos mandarle al servidor ?Alumno_id=
+        $("#adjuntos").load('@Url.Content("~/home/adjuntos/?Alumno_id=" + Model.id)');
+    }
+
+</script>
+
+@*PETICIONES DE AJAX
+    Enviando nuestro formulario al Controlador mediante AJAX
+    estas peticiones se pueden revisar desde las herramientas del navegador en el apartado de XHR (Muestra Peticiones y respuestas)
+
+    La lógica de este es hacer que los formularios se vuelvan dinámicos para enviar peticiones AJAX en vez de manualmente.
+    Si puedes ver el ini.js esta asociado a un evento click del botón. Por ende, cualquier botón que cumpla dichas condiciones habilitará esta lógica.
+
+    Luego de esto, más abajo del código tenemos respuestas, estas respuestas las gestionamos desde el servidor como un json para indicar un comportamiento diferente.
+    Por ejemplo, el campo href le dirá que debe redireccionar a una página X, el campo function que ejecute una función de javascript, así sucesivamente.
+*@
+
+@*<script>
+        $(document).ready(function () {//La funcion se ejecuta en cuanto el servidor está listo...
+            $("#frm-alumno").submit(function (){ //Cuando el evento submit se ejecute en el formulario frm-alumno
+                var form = $(this); //Guardamos en una variable, para obtener mas adelante la url
+                $ajax({//Ejecuta una petición AJAX
+                    dataType: 'JSON',//Esperamos nos retorne un JSON
+                    type: 'POST',//Pasamos información por el método POST
+                    url: form.attr('action'),//Obtiene la URL del formulario
+                    data: form.serialize(),//Va a serializar todo el formulario, esta es una propiedad de JQuery(con el fin de evitar la asignacion de variables uno a uno)
+                    success: function (r) {
+                        if (r.response) {
+                            window.location.href = r.href;//Redirige a la URL definida en la funcion guardar
+                        }
+                        else {
+                            alert(r.message);//en caso de que sea false  muestra un mensaje
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {//
+                        console.log(textStatus + ' ' + errorThrown);
+                    }
+                });
+                return false; //Para anular el postback del script
+            }
+        })
+    </script>*@
+
+
+@*Ejemplo de como usar funciones ( La funcion se ejecuta en el controlador )
+
+    <script>
+        function SoyAlgo() {
+            alert('Algo');
+        }
+    </script>*@

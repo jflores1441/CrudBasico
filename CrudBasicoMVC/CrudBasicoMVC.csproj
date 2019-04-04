@@ -94,7 +94,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="assets\css\bootstrap-theme.min.css" />
     <Content Include="assets\css\bootstrap.min.css" />
     <Content Include="assets\css\style.css" />
     <Content Include="assets\fonts\glyphicons-halflings-regular.svg" />
@@ -128,6 +127,8 @@
     <Content Include="Views\_Viewstart.cshtml" />
     <Content Include="Views\Home\Ver.cshtml" />
     <Content Include="Views\Home\Crud.cshtml" />
+    <Content Include="Views\Home\Cursos.cshtml" />
+    <Content Include="Views\Home\Adjuntos.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -138,6 +139,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
+    <Folder Include="Uploads\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Model\Model.csproj">

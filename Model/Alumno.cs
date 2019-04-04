@@ -107,9 +107,10 @@ namespace Model
 
 
         //Método que usamos despues de incluir script , ajax y ResponseModel
+
         public ResponseModel Guardar()
         {
-            var rm = new ResponseModel();
+            var rm = new ResponseModel(); //Al instanciar el ResponseModel se da por hecho que a ocurrido un error 
 
             try
             {
@@ -123,7 +124,8 @@ namespace Model
                     {
                         ctx.Entry(this).State = EntityState.Added;
                     }
-                    rm.SetResponse(true);
+
+                    rm.SetResponse(true); //Cuando procede cambiamos el estado del ResponseModel con true 
                     ctx.SaveChanges();
                 }
             }

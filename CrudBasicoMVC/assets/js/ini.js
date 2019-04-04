@@ -25,7 +25,7 @@
                 url = button.data('url');
             }
         } else {
-            if (!form.validate()) {
+            if (!form.valid()) {
                 return false;
             }
         }
